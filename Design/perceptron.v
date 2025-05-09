@@ -22,7 +22,7 @@ module perceptron #(parameter WIDTH = 25, OPTIONS = 2) (
             case (i)
             12:           r_weights[i] = 2'b11;
             0,4,20,24:    r_weights[i] = 2'b10; //CROSS WEIGHTS
-            2,10,14,22:   r_weights[i] = 2'b01; //CIRCLE WEIGHTS
+            //2,10,14,22:   r_weights[i] = 2'b01; //CIRCLE WEIGHTS
             default:      r_weights[i] = 2'b00; //NEUTRAL
             endcase 
         end 
@@ -30,7 +30,7 @@ module perceptron #(parameter WIDTH = 25, OPTIONS = 2) (
         r_state = 0;
     end
 
-    always @(posedge clk) begin
+    always @(posedge clk && en) begin
 
         if(r_state == 0) begin
             r_multiply <= r_weights[0] & {2{in[0]}}; //using AND since it gives same results as *

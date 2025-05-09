@@ -34,16 +34,19 @@ perceptron perceptron_inst(
 initial begin
     clk_tb = 0;
     state_tb = 0;
+    en_tb = 0;
     forever begin
         #5 clk_tb = ~clk_tb;
     end
 end
 
+initial #10000 state_tb = 4'hF;
 
-always @(posedge clk_tb) begin
+
+always @(negedge clk_tb) begin
     case (state_tb)
     0: begin
-        {en_tb, input_val_tb} <= {1'd1,25'd0};
+        {en_tb, input_val_tb} <= {1'd0,25'd0};
         state_tb <= state_tb + 1;
     end
     1: begin
@@ -51,6 +54,18 @@ always @(posedge clk_tb) begin
         if(ready_tb) state_tb <= state_tb + 1;
     end
     2: begin
+        {en_tb, input_val_tb} <= {1'd1,`CROSS_VAL};
+        if(ready_tb) state_tb <= state_tb + 1;
+    end
+    3: begin
+        {en_tb, input_val_tb} <= {1'd1,`CIRCLE_VAL};
+        if(ready_tb) state_tb <= state_tb + 1;
+    end
+    4: begin
+        {en_tb, input_val_tb} <= {1'd1,`CROSS_VAL};
+        if(ready_tb) state_tb <= state_tb + 1;
+    end
+    5: begin
         {en_tb, input_val_tb} <= {1'd1,`CROSS_VAL};
         if(ready_tb) state_tb <= state_tb + 1;
     end
@@ -64,13 +79,12 @@ end
 
 
 
+
+
+
 initial begin // file save
     $dumpfile(`tb_path);
     $dumpvars;
     $dumpon;
 end
-
-
-
-
 endmodule
