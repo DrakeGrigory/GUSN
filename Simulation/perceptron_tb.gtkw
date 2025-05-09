@@ -1,15 +1,15 @@
 [*]
-[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Mon May  5 13:59:27 2025
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Fri May 09 14:37:44 2025
 [*]
-[dumpfile] "/home/student/Documents/GK/AI/Simulation/perceptron_tb.vcd"
-[dumpfile_mtime] "Mon May  5 13:58:32 2025"
-[dumpfile_size] 3716
-[savefile] "/home/student/Documents/GK/AI/Simulation/perceptron_tb.gtkw"
-[timestart] 200000
-[size] 2488 1376
+[dumpfile] "D:\New_Data\MSC\MSC_s3\GUSN\AI_Project\Simulation\perceptron_tb.vcd"
+[dumpfile_mtime] "Fri May 09 13:36:22 2025"
+[dumpfile_size] 2048
+[savefile] "D:\New_Data\MSC\MSC_s3\GUSN\AI_Project\Simulation\perceptron_tb.gtkw"
+[timestart] 0
+[size] 1540 845
 [pos] -1 -1
-*-15.000000 253200 255000 505000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-17.000000 281100 255000 505000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] perceptron_tb.
 [sst_width] 233
 [signals_width] 246
@@ -31,9 +31,10 @@ perceptron_tb.perceptron_inst.r_multiply[1:0]
 (1)perceptron_tb.perceptron_inst.r_multiply[1:0]
 @1401200
 -group_end
-@25
-perceptron_tb.perceptron_inst.r_accumulate[5:0]
 @24
+perceptron_tb.perceptron_inst.r_accumulate[5:0]
 perceptron_tb.perceptron_inst.out[1:0]
+@29
+perceptron_tb.ready_tb
 [pattern_trace] 1
 [pattern_trace] 0
