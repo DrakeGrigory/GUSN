@@ -11,63 +11,84 @@ st_val: begin \
     code\
 state_name <= jmp_val; end 
 
+`define NEXT_STATE  if(ready_dut && r_state_change_delay == 0) begin\
+                        state_tb <= state_tb + 1;\
+                        r_state_change_delay <= 0;\
+                    end
+
+
 module perceptron_tb();
 
 reg [3:0] state_tb; 
-
-
-
-reg [24:0] input_val_tb;
-reg en_tb;
 reg clk_tb;
-wire ready_tb;
-wire [1:0] out_tb;
+reg r_state_change_delay;
+
+
+reg [24:0] input_val_dut;
+reg en_dut;
+reg clk_dut;
+wire ready_dut;
+wire [1:0] out_dut;
 perceptron perceptron_inst(
-    .in(input_val_tb),
-    .en(en_tb),
-    .clk(clk_tb),
-    .out(out_tb),
-    .ready(ready_tb)
+    .in(input_val_dut),
+    .en(en_dut),
+    .clk(clk_dut),
+    .out(out_dut),
+    .ready(ready_dut)
 );
 
 
 initial begin
     clk_tb = 0;
     state_tb = 0;
-    en_tb = 0;
+    en_dut = 0;
+    clk_dut = 0;
+    r_state_change_delay = 0;
+end
+initial begin  
     forever begin
-        #5 clk_tb = ~clk_tb;
+        #10 clk_tb = ~clk_tb;
     end
 end
+always @(posedge clk_tb) begin
+    clk_dut <= ~clk_dut;
+    r_state_change_delay <= r_state_change_delay+1;
+end
+
+
 
 initial #10000 state_tb = 4'hF;
 
 
-always @(negedge clk_tb) begin
+always @(posedge clk_tb) begin
     case (state_tb)
     0: begin
-        {en_tb, input_val_tb} <= {1'd0,25'd0};
+        {en_dut, input_val_dut} <= {1'd0,25'd0};
+
         state_tb <= state_tb + 1;
     end
     1: begin
-        {en_tb, input_val_tb} <= {1'd1,`CIRCLE_VAL};
-        if(ready_tb) state_tb <= state_tb + 1;
+        {en_dut, input_val_dut} <= {1'd1,`CIRCLE_VAL};
+        
+        `NEXT_STATE
     end
     2: begin
-        {en_tb, input_val_tb} <= {1'd1,`CROSS_VAL};
-        if(ready_tb) state_tb <= state_tb + 1;
+        {en_dut, input_val_dut} <= {1'd1,`CROSS_VAL};
+
+        `NEXT_STATE
     end
     3: begin
-        {en_tb, input_val_tb} <= {1'd1,`CIRCLE_VAL};
-        if(ready_tb) state_tb <= state_tb + 1;
+        {en_dut, input_val_dut} <= {1'd1,`CIRCLE_VAL};
+
+        `NEXT_STATE
     end
     4: begin
-        {en_tb, input_val_tb} <= {1'd1,`CROSS_VAL};
-        if(ready_tb) state_tb <= state_tb + 1;
+        {en_dut, input_val_dut} <= {1'd1,`CROSS_VAL};
+        if(ready_dut) state_tb <= state_tb + 1;
     end
     5: begin
-        {en_tb, input_val_tb} <= {1'd1,`CROSS_VAL};
-        if(ready_tb) state_tb <= state_tb + 1;
+        {en_dut, input_val_dut} <= {1'd1,`CROSS_VAL};
+        if(ready_dut) state_tb <= state_tb + 1;
     end
     default: begin
        $finish();
