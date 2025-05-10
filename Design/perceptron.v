@@ -6,7 +6,8 @@ module perceptron #(parameter WIDTH = 25, WEIGHTS = 4) (
     input en,
     input clk,
     output reg [1:0] out,
-    output reg ready
+    output reg ready,
+    output [$clog2(WIDTH)-1:0] acc
 );
     localparam reg_weights_size      = $clog2(WIDTH);
     localparam reg_weights_vals_size = $clog2(WEIGHTS);
@@ -60,9 +61,14 @@ module perceptron #(parameter WIDTH = 25, WEIGHTS = 4) (
 
     always @(*) begin
         r_multiply = (r_state_index < WIDTH) ? r_weights[r_state_index] & {reg_weights_vals_size{in[r_state_index]}} : 0;
-        ready = (r_state_index == WIDTH + 1) ? 1:0;
-        if      ((r_accumulate == `CROSS_SUM_VAL)  && (ready))    out = 2'b10;
-        else if ((r_accumulate == `CIRCLE_SUM_VAL) && (ready))    out = 2'b01;
-        else                                                      out = 2'b00;
+        ready = (r_state_index == WIDTH) ? 1:0;
+        if(!ready)
+            out = 2'b00; //NOT READY
+        else begin
+            if      (r_accumulate == `CIRCLE_SUM_VAL) out = 2'b10;
+            else if (r_accumulate == `CROSS_SUM_VAL ) out = 2'b11;
+            else                                      out = 2'b01;
+        end 
     end
+    assign acc = r_accumulate;
 endmodule

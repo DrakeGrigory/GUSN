@@ -1,4 +1,3 @@
-//iverilog -o Simulation/perceptron_tb perceptron_tb.v && vvp Simulation/perceptron_tb && gtkwave "Simulation/perceptron_tb.gtkw" --rcvar 'fontname_signals Monospace 15' --rcvar 'fontname_waves Monospace 12'
 `timescale  1ns/1ps
 `include "Design/perceptron.v"
 `define TB_PATH "Simulation/perceptron_tb.vcd"
@@ -6,43 +5,62 @@
 
 
 
+`define CROSS_SUM_VAL 11
 `define CROSS_VAL  {1'b1, 24'h15_11_51}
+`define CROSS_OUT_VAL 3
+
+`define CIRCLE_SUM_VAL 4
 `define CIRCLE_VAL {1'b0, 24'h45_45_44}
+`define CIRCLE_OUT_VAL 2
 
-`define CASE_FSM(en,input_val) {en_dut, input_val_dut} <= {en,input_val}; `NEXT_STATE 
+//--------------------------------------------------------------------------------------
 
-`define NEXT_STATE  if(ready_dut && r_state_change_delay > 5) begin\
+
+`define CASE_FSM(en,input_val) \
+                    {en_dut, input_val_dut} <= {en,input_val};
+
+`define DISPLAY(val) \
+                    if(ready_dut && r_state_change_delay > delay_val/2)\
+                        if     (val == `CIRCLE_VAL) $display("At FSM STATE %0d: [out= %0d | %0d]   [acc= %0d | %0d]   ",state_tb,out_dut,`CIRCLE_OUT_VAL,acc_dut,`CIRCLE_SUM_VAL);\
+                        else if(val == `CROSS_VAL ) $display("At FSM STATE %0d: [out= %0d | %0d]   [acc= %0d | %0d]   ",state_tb,out_dut,`CROSS_OUT_VAL ,acc_dut,`CROSS_SUM_VAL );\
+                        else                        $display("At FSM STATE %0d: BAD INPUT");
+                            
+
+// YES, number 5 is arbitrary
+`define NEXT_STATE \
+                    if(ready_dut && r_state_change_delay > 5) begin\
                         state_tb <= state_tb + 1;\
                         r_state_change_delay <= 0;\
                     end
 
 
+
+
 module perceptron_tb();
     localparam width = 25;
+    localparam width_size = $clog2(width);
+    localparam delay_val = width*4;
     reg [3:0] state_tb; 
     reg clk_tb;
-    reg [$clog2(width*4)-1:0] r_state_change_delay;
-//     string symbol1 = "Nothing";
-// always @(*) begin
-//     case(out_dut)
-//     0: symbol = "Nothing";
-//     1: symbol = "Circle";
-//     2: symbol = "Cross";
-//     3: symbol = "NA";
-//     endcase
-// end
+    reg [$clog2(delay_val)-1:0] r_state_change_delay;
+    reg [1:0] out_dut_exp;
+    reg [width_size-1:0] acc_dut_exp;
+    reg [width-1:0] input_val_tb;
 
 
 
-    reg [24:0] input_val_dut;
+
+    reg [width-1:0] input_val_dut;
     reg en_dut;
     reg clk_dut;
     wire ready_dut;
     wire [1:0] out_dut;
+    wire [width_size-1:0] acc_dut;
     perceptron #(.WIDTH(width), .WEIGHTS(4)) perceptron_inst(
         .in(input_val_dut),
         .en(en_dut),
         .clk(clk_dut),
+        .acc(acc_dut),
         .out(out_dut),
         .ready(ready_dut)
     );
@@ -70,18 +88,20 @@ module perceptron_tb();
         case (state_tb)
         0: begin
             {en_dut, input_val_dut} <= {1'd0,25'd0};
-
+            $display(" ======= DISPLAYING DATA =======");
             state_tb <= state_tb + 1;
+           
         end
-        1: begin `CASE_FSM(1'd1,`CIRCLE_VAL); end
-        2: begin `CASE_FSM(1'd1,`CROSS_VAL ); end
-        3: begin `CASE_FSM(1'd1,`CROSS_VAL ); end
-        4: begin `CASE_FSM(1'd1,`CIRCLE_VAL); end
+        1: begin input_val_tb <=`CIRCLE_VAL;   `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+        2: begin input_val_tb <=`CROSS_VAL ;   `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+        3: begin input_val_tb <=`CROSS_VAL ;   `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+        4: begin input_val_tb <=`CIRCLE_VAL;   `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
         5: begin
             {en_dut, input_val_dut} <= {1'd1,`CROSS_VAL};
             `NEXT_STATE
         end
         default: begin
+            $display(" ========== FINISHING ==========");
             #30
         $finish();
         end
