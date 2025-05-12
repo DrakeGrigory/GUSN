@@ -43,8 +43,6 @@ module perceptron_tb();
     reg [3:0] state_tb; 
     reg clk_tb;
     reg [$clog2(delay_val)-1:0] r_state_change_delay;
-    reg [1:0] out_dut_exp;
-    reg [width_size-1:0] acc_dut_exp;
     reg [width-1:0] input_val_tb;
 
 
