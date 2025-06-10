@@ -1,12 +1,22 @@
 import numpy as np
 
+### -------------------  ANSI COLOR CODES -------------------  ###
+BLACK        = '\033[40m  \033[0m'  # Black background, two spaces
+WHITE        = '\033[47m  \033[0m'  # White background, two spaces
+DARK_GREY    = '\033[48;5;235m  \033[0m'
+MEDIUM_GREY  = '\033[48;5;240m  \033[0m'
+LIGHT_GREY   = '\033[48;5;245m  \033[0m'
+BRIGHT_BLACK = '\033[100m  \033[0m'
+BLACK        = '\033[40m  \033[0m'
+
+### -----------------------  FUNCTION -----------------------  ###
 def spaces(num):
     sp = ""
     for i in range(0,num):
         sp += " "
-
     return sp
 
+### -------------------------  MAIN -------------------------  ###
 
 
 # Example boolean matrices
@@ -16,16 +26,29 @@ matrices = [
     np.array([[1,1,0],[1,0,1],[0,1,0]], dtype=bool), #0_1
     np.array([[0,0,0],[1,0,1],[0,1,0]], dtype=bool), #0_2
     np.array([[0,1,1],[1,0,1],[0,1,0]], dtype=bool), #0_3
+    np.array([[0,1,0],[0,0,1],[0,1,0]], dtype=bool)  #0_4
 ]
 
-# ANSI color codes
-BLACK        = '\033[40m  \033[0m'  # Black background, two spaces
-WHITE        = '\033[47m  \033[0m'  # White background, two spaces
-DARK_GREY    = '\033[48;5;235m  \033[0m'
-MEDIUM_GREY  = '\033[48;5;240m  \033[0m'
-LIGHT_GREY   = '\033[48;5;245m  \033[0m'
-BRIGHT_BLACK = '\033[100m  \033[0m'
-BLACK        = '\033[40m  \033[0m'
+circle_ref = np.array([[0,1,2],
+                       [3,4,5],
+                       [6,7,8]])
+#print(len(circle_ref[0:,0])) #0,1,2 
+#print(len(circle_ref[0]))    #0,3,6
+
+#for j_rows in range(0, len(circle_ref)):
+arr1 = [10,0,30]
+arr1_size = (len(arr1)>>1)+1
+arr_save = np.zeros(3,3)
+print(arr_save)
+
+
+print(arr1_size)
+print(arr1)
+for i_colls in range(0, len(arr1)):
+    if(arr1[i_colls] > 0):
+        arr1[i_colls] = 0xFF
+print(arr1)
+
 
 max_cols = 5  # max matrices per row
 for i in range(0, len(matrices), max_cols):
