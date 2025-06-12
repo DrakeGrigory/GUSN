@@ -9,20 +9,20 @@ import numpy as np
 
 
 def injector(arg_org,printResult):
-    arr_len_half = (len(arg_org)>>1)+1
-    units = arr_len_half * arr_len_half
+    arr_len_half = (len(arg_org)>>1)+1 #get half length + middle row
+    units = arr_len_half * arr_len_half #calculate ammount of injections
 
-    arr3D = np.zeros([units,len(arg_org),len(arg_org)],dtype=bool)
+    arr3D = np.zeros([units,len(arg_org),len(arg_org)],dtype=bool) #create an array for saving
     for u in range(0, units):
         arr3D[u]=arg_org
 
     cnt=0
-    for j_rows in range(0, arr_len_half):
+    for j_rows in range(0, arr_len_half): #inject the data
         for i_colls in range(0, arr_len_half):
             arr3D[(cnt),j_rows,i_colls] = ~(arr3D[(cnt),j_rows,i_colls])
             cnt = cnt + 1
 
-    if(printResult):
+    if(printResult): #optional printing
         print("\n Input matrix:\n" + str(arg_org) +"\n\nOutput of injector:\n" + str(arr3D))
     
     return arr3D
