@@ -1,4 +1,4 @@
-
+import numpy as np
 circle_ref = np.array([[0,1,2],
                        [3,4,5],
                        [6,7,8]])
