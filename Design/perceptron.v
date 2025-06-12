@@ -23,6 +23,7 @@ module perceptron #(parameter WIDTH = 25, WEIGHTS = 4) (
     reg [1:0]          r_multiply;
     reg [1:0]          r_weights [0:WIDTH-1];
 
+    //LOADING - TEMPORARY 
     initial begin
         for (i=0; i<WIDTH; i = i+1) begin
             case (i)
