@@ -1,4 +1,6 @@
 import numpy as np
+
+# ------------------------------ INJECTOR ------------------------------ INJECTOR ------------------------------ # 
 #INJECTOR - adds an error in a single bit of array.
 #Since my case is symetrical (X and O) it only injects in the 1/4 of the martix including middle row and collumn
 
@@ -29,3 +31,24 @@ def injector(arg_org,printResult):
 
 #Test call
 #arr3D_2 = injector(arr1,1)
+# ------------------------------ INJECTOR ------------------------------ INJECTOR ------------------------------ #
+# -------------------------------------------------------------------------------------------------------------- #
+# ---------------------------- CLI_PRINTER ---------------------------- CLI_PRINTER ------------------------------ #
+def cli_printer():
+    BLACK        = '\033[40m  \033[0m'  # Black background, two spaces
+    WHITE        = '\033[47m  \033[0m'  # White background, two spaces
+    DARK_GREY    = '\033[48;5;235m  \033[0m'
+    MEDIUM_GREY  = '\033[48;5;240m  \033[0m'
+    LIGHT_GREY   = '\033[48;5;245m  \033[0m'
+    BRIGHT_BLACK = '\033[100m  \033[0m'
+    BLACK        = '\033[40m  \033[0m'
+
+    def spaces(num):
+        sp = ""
+        for i in range(0,num):
+            sp += " "
+        return sp
+    
+
+
+### -------------------------  MAIN -------------------------  ###
