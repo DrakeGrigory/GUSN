@@ -1,29 +1,21 @@
-import matplotlib.image as mpimg
-import matplotlib.pyplot as plt
-import matplotlib.patches as ptch
 import numpy as np
-
-img = np.array([[1,0,1],  [0,1,0],  [1,0,1]], dtype=bool)
-print(img)
+import functions as f
 
 
-fig, ax = plt.subplots()
 
-plt.imshow(img, #source image 
-           cmap='gray', #ensures black and white coloring
-           interpolation='nearest') #keeps sharp pixel edges
-plt.axis('off') #disable axis
+# Reference boolean matrices
+matrices_org = [
+    np.array([[1,0,1],[0,1,0],[1,0,1]], dtype=bool), #CROSS  (X)
+    np.array([[0,1,0],[1,0,1],[0,1,0]], dtype=bool), #CIRCLE (O)
+]
 
-rows, cols = img.shape
-border = ptch.Rectangle(
-        (0-0.5, 0-0.5),
-         cols,rows,        #image size
-         edgecolor='black',  #border color
-         linewidth=1,      #border width
-         facecolor='none') #transparent inside
+names = ["Cross ",
+         "Circle"]
+for i in range(0,2):
+    #inject matrixes with error
+    matrix_set = f.injector(matrices_org[i])
 
-ax.add_patch(border)
-plt.show()
+    #printing matrixes in CLI 
+    matrix_set_with_org = np.insert(matrix_set, 0, matrices_org[i], axis=0)
+    f.cli_printer(matrix_set_with_org,5,names[i])
 
-# Save and show an image
-#plt.savefig("Translator/img1.png",dpi=1,bbox_inches='tight', pad_inches=0)

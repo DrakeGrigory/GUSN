@@ -10,11 +10,11 @@ import numpy as np
 #                 [0,1,0]])
 
 
-def injector(arg_org,printResult):
+def injector(arg_org,printResult=0):
     arr_len_half = (len(arg_org)>>1)+1 #get half length + middle row
     units = arr_len_half * arr_len_half #calculate ammount of injections
 
-    arr3D = np.zeros([units,len(arg_org),len(arg_org)],dtype=bool) #create an array for saving
+    arr3D = np.array(np.zeros([units,len(arg_org),len(arg_org)],dtype=bool)) #create an array for saving
     for u in range(0, units):
         arr3D[u]=arg_org
 
@@ -33,8 +33,12 @@ def injector(arg_org,printResult):
 #arr3D_2 = injector(arr1,1)
 # ------------------------------ INJECTOR ------------------------------ INJECTOR ------------------------------ #
 # -------------------------------------------------------------------------------------------------------------- #
-# ---------------------------- CLI_PRINTER ---------------------------- CLI_PRINTER ------------------------------ #
-def cli_printer():
+#
+#
+#
+# -------------------------------------------------------------------------------------------------------------- #
+# ---------------------------- CLI_PRINTER ---------------------------- CLI_PRINTER ---------------------------- #
+def cli_printer(matrices,max_cols,org_name):
     BLACK        = '\033[40m  \033[0m'  # Black background, two spaces
     WHITE        = '\033[47m  \033[0m'  # White background, two spaces
     DARK_GREY    = '\033[48;5;235m  \033[0m'
@@ -49,6 +53,21 @@ def cli_printer():
             sp += " "
         return sp
     
+    for i in range(0, len(matrices), max_cols):
+        group = matrices[i:i+max_cols]
+        header = spaces(2)+str(org_name)+spaces(2)+" ".join([spaces(3)+f"Matrix {i+j+1}" for (j) in range(1,len(group))])
+        print(header) # Print each row of the group side by side
+        
+        for row_idx in range(group[0].shape[0]):
+            line = ""
+            for mat in group:
+                line += spaces(2) 
+                line += ''.join([WHITE if val else DARK_GREY for val in mat[row_idx]])
+                line += spaces(4)
+            print(line)
+        print()
+
+
 
 
 ### -------------------------  MAIN -------------------------  ###
