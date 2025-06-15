@@ -1,7 +1,12 @@
 import numpy as np
 import functions as f
 
-
+# Weights for the martix
+weights = np.array([
+    [1, 2, 1],
+    [2, 3, 2],
+    [1, 2, 1]
+])
 
 # Reference boolean matrices
 matrices_org = [
@@ -11,6 +16,10 @@ matrices_org = [
 
 names = ["Cross ",
          "Circle"]
+
+
+f.display_weights(weights)
+
 for i in range(0,2):
     #inject matrixes with error
     matrix_set = f.injector(matrices_org[i])
