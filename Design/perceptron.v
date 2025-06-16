@@ -16,12 +16,14 @@ module perceptron #(parameter WIDTH = 25, WEIGHTS = 4) (
 
     localparam fsm_mac_multiply   = 0;
     localparam fsm_mac_accumulate = 1;
+    localparam insFilePath = "DataSet/data_set.hex";
 
     reg [reg_weights_size-1:0] r_accumulate;
     reg [reg_weights_size-1:0] r_state_index;
     reg [1:0]          r_state_mac;
     reg [1:0]          r_multiply;
     reg [1:0]          r_weights [0:WIDTH-1];
+    reg [31:0] r_temp_load;
 
     //LOADING - TEMPORARY 
     initial begin
@@ -37,7 +39,8 @@ module perceptron #(parameter WIDTH = 25, WEIGHTS = 4) (
         r_state_index = 0;
         r_state_mac = 0;
     end
-
+    
+    
     always @(posedge clk && en) begin
     
         if(r_state_index <= WIDTH) begin

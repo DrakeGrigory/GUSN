@@ -48,9 +48,9 @@ def cli_printer(matrices,max_cols,org_name):
     BLACK        = '\033[40m  \033[0m'
 
     if(matrices[0].shape[0]==3):
-        space_val = [2,3]
+        space_val = [2,3,2,3]
     elif(matrices[0].shape[0]==5):
-        space_val = [4,5,6]
+        space_val = [4,5,6,3]
 
     def spaces(num):
         sp = ""
@@ -60,7 +60,10 @@ def cli_printer(matrices,max_cols,org_name):
     
     for i in range(0, len(matrices), max_cols):
         group = matrices[i:i+max_cols]
-        header = spaces(space_val[0])+str(org_name)+spaces(space_val[1])+" ".join([spaces(space_val[2])+f"Matrix {i+j}" for (j) in range(1,len(group))])
+        if(i == 0):
+            header = spaces(space_val[0])+str(org_name)+spaces(space_val[1])+" ".join([spaces(space_val[2])+f"Matrix {i+j}" for (j) in range(1,len(group))])
+        else:
+            header = " ".join([spaces(space_val[0])+f"Matrix {i+j}"+spaces(space_val[3]) for (j) in range(0,len(group))])
         print(header) # Print each row of the group side by side
         
         for row_idx in range(group[0].shape[0]):
@@ -128,7 +131,7 @@ def display_weights(weights):
 # -------------------------------------------------------------------------------------------------------------- #
 # --------------------------- SAVE_DATA_SET ------------------------- SAVE_DATA_SET ---------------------------- #
 
-def save_data_set(matrix_set, mode, hex_filename="../DataSet/data_set.hex"):
+def save_data_set(matrix_set, mode, hex_filename="DataSet/data_set.hex"):
     #print(matrix_set)
     file_i = open(hex_filename, mode)
 

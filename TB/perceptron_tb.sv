@@ -15,7 +15,8 @@
 
 //--------------------------------------------------------------------------------------
 
-
+//I decided to train with define usage
+//Obviously task is a better option.
 `define CASE_FSM(en,input_val) \
                     {en_dut, input_val_dut} <= {en,input_val};
 
@@ -44,7 +45,7 @@ module perceptron_tb();
     reg clk_tb;
     reg [$clog2(delay_val)-1:0] r_state_change_delay;
     reg [width-1:0] input_val_tb;
-
+    reg [7:0] prev_result;
 
 
 
@@ -54,6 +55,8 @@ module perceptron_tb();
     wire ready_dut;
     wire [1:0] out_dut;
     wire [width_size-1:0] acc_dut;
+
+    reg [memory_set
     perceptron #(.WIDTH(width), .WEIGHTS(4)) perceptron_inst(
         .in(input_val_dut),
         .en(en_dut),
@@ -70,6 +73,8 @@ module perceptron_tb();
         en_dut = 0;
         clk_dut = 0;
         r_state_change_delay = 0;
+
+        readmemh()
     end
     initial begin   // clk of tb
         forever begin
@@ -79,6 +84,10 @@ module perceptron_tb();
     always @(posedge clk_tb) begin //clk of dut
         clk_dut <= ~clk_dut;
         r_state_change_delay <= r_state_change_delay+1; //prevents premature change of fsm
+        if(out_dut==2'b11)
+            prev_result <= 8'd88;
+        else if(out_dut==2'b10)
+            prev_result <= 8'd75;
     end
 
 
