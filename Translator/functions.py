@@ -47,6 +47,11 @@ def cli_printer(matrices,max_cols,org_name):
     BRIGHT_BLACK = '\033[100m  \033[0m'
     BLACK        = '\033[40m  \033[0m'
 
+    if(matrices[0].shape[0]==3):
+        space_val = [2,3]
+    elif(matrices[0].shape[0]==5):
+        space_val = [4,5,6]
+
     def spaces(num):
         sp = ""
         for i in range(0,num):
@@ -55,7 +60,7 @@ def cli_printer(matrices,max_cols,org_name):
     
     for i in range(0, len(matrices), max_cols):
         group = matrices[i:i+max_cols]
-        header = spaces(2)+str(org_name)+spaces(2)+" ".join([spaces(3)+f"Matrix {i+j}" for (j) in range(1,len(group))])
+        header = spaces(space_val[0])+str(org_name)+spaces(space_val[1])+" ".join([spaces(space_val[2])+f"Matrix {i+j}" for (j) in range(1,len(group))])
         print(header) # Print each row of the group side by side
         
         for row_idx in range(group[0].shape[0]):
@@ -114,3 +119,29 @@ def display_weights(weights):
             row += f"{color} {weights[i, j]} {RESET}"
         print(row)
     print("")
+
+# -------------------------- DISPLAY_WEIGHTS -------------------- DISPLAY_WEIGHTS ------------------------------ #
+# -------------------------------------------------------------------------------------------------------------- #
+#
+#
+#
+# -------------------------------------------------------------------------------------------------------------- #
+# --------------------------- SAVE_DATA_SET ------------------------- SAVE_DATA_SET ---------------------------- #
+
+def save_data_set(matrix_set, mode, hex_filename="../DataSet/data_set.hex"):
+    #print(matrix_set)
+    file_i = open(hex_filename, mode)
+
+    for matrix in matrix_set:
+        #print(matrix.shape)    
+        bits=''
+        for row in matrix:
+            #print(f"row:{row}")
+            bits += ''.join(['1' if x else '0' for x in row])
+        
+        str_to_hex = hex(int(bits, 2)) # convert int to a hex & convert string base2/binary to int
+        hex_val_no0x= str_to_hex[2:]   # Remove '0x'
+        hex_val = hex_val_no0x.upper() # uppercase
+        #print(f"Bits: {bits}   str_to_hex {str_to_hex}   hex_val_no0x {hex_val_no0x}    hex_val{hex_val}")
+        file_i.write(f"{hex_val}\n")
+    file_i.close()
