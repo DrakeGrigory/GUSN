@@ -38,15 +38,18 @@
 
 
 module perceptron_tb();
+    localparam set_size = 20;
     localparam width = 25;
     localparam width_size = $clog2(width);
     localparam delay_val = width*4;
-    reg [3:0] state_tb; 
+    reg [5:0] state_tb; 
     reg clk_tb;
     reg [$clog2(delay_val)-1:0] r_state_change_delay;
     reg [width-1:0] input_val_tb;
     reg [7:0] prev_result;
-
+    reg [27:0] memory_set_extened [set_size-1:0];
+    reg [width-1:0] memory_set [set_size-1:0];
+    integer i;
 
 
     reg [width-1:0] input_val_dut;
@@ -56,7 +59,7 @@ module perceptron_tb();
     wire [1:0] out_dut;
     wire [width_size-1:0] acc_dut;
 
-    reg [memory_set
+    
     perceptron #(.WIDTH(width), .WEIGHTS(4)) perceptron_inst(
         .in(input_val_dut),
         .en(en_dut),
@@ -74,7 +77,13 @@ module perceptron_tb();
         clk_dut = 0;
         r_state_change_delay = 0;
 
-        readmemh()
+        $readmemh("DataSet/data_set.hex",memory_set_extened,0,set_size-1);
+        for(i=0; i<set_size; i=i+1) begin
+            $display("Memory[%0d]:       %h",i,memory_set_extened[i]);
+            memory_set[i] = memory_set_extened[i];
+            $display("Memory_trunc[%0d]: %h",i,memory_set[i]);
+        end
+
     end
     initial begin   // clk of tb
         forever begin
@@ -93,25 +102,41 @@ module perceptron_tb();
 
     always @(posedge clk_tb) begin
         case (state_tb)
-        0: begin
-            {en_dut, input_val_dut} <= {1'd0,25'd0};
-            $display(" ======= DISPLAYING DATA =======");
-            state_tb <= state_tb + 1;
-           
-        end
-        1: begin input_val_tb <=`CIRCLE_VAL;   `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
-        2: begin input_val_tb <=`CROSS_VAL ;   `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
-        3: begin input_val_tb <=`CROSS_VAL ;   `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
-        4: begin input_val_tb <=`CIRCLE_VAL;   `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
-        5: begin
-            {en_dut, input_val_dut} <= {1'd1,`CROSS_VAL};
-            `NEXT_STATE
-        end
-        default: begin
-            $display(" ========== FINISHING ==========");
-            #30
-        $finish();
-        end
+            0: begin
+                {en_dut, input_val_dut} <= {1'd0,25'd0};
+                $display(" ======= DISPLAYING DATA =======");
+                state_tb <= state_tb + 1;
+                i=0;
+               
+            end
+            1:  begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            2:  begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            3:  begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            4:  begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            5:  begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            6:  begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            7:  begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            8:  begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            9:  begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            10: begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            11: begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            12: begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            13: begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            14: begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            15: begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            16: begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            17: begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            18: begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            19: begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            20: begin input_val_tb <=memory_set[i];   i=i+1;  `CASE_FSM(1'd1,input_val_tb);   `DISPLAY(input_val_tb)   `NEXT_STATE  end
+            //    {en_dut, input_val_dut} <= {1'd1,`CROSS_VAL};
+            //    `NEXT_STATE
+            //end
+            default: begin
+                $display(" ========== FINISHING ==========");
+                #30
+            $finish();
+            end
         endcase    
 
     end
